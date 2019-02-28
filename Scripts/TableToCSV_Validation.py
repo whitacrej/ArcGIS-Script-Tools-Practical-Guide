@@ -6,20 +6,17 @@ class ToolValidator(object):
   def __init__(self):
     """Setup arcpy and the list of tool parameters."""
     self.params = arcpy.GetParameterInfo()
-
+    return
+    
   def initializeParameters(self):
     """Refine the properties of a tool's parameters.  This method is
     called when the tool is opened."""
+    # Disable all optional parameters
     self.params[3].enabled = False
     self.params[4].enabled = False
     self.params[5].enabled = False
     self.params[6].enabled = False
     self.params[7].enabled = False
-
-    self.params[4].category = 'Add Geometry Attributes'
-    self.params[5].category = 'Add Geometry Attributes'
-    self.params[6].category = 'Add Geometry Attributes'
-    self.params[7].category = 'Add Geometry Attributes'
 
     return
 
@@ -27,19 +24,21 @@ class ToolValidator(object):
     """Modify the values and properties of parameters before internal
     validation is performed.  This method is called whenever a parameter
     has been changed."""
+
     if self.params[0].value and not self.params[0].hasBeenValidated:
         try:
-
+            # Create a describe object for 'Input Table'
             desc = arcpy.Describe(self.params[0].value)
 
-            # If 'Input Table' is populated with a FileGDB table, enable parameter: 'Add Field Aliaases to CSV Table (optional)'
-            if '.gdb' in desc.path:
+            # Check if 'Input Table' contains aliases, and if so enable Add Field Aliaases to CSV Table (optional)' parameter
+            aliases = [field.aliasName for field in desc.fields if field.aliasName != field.name]
+            if aliases:
                 self.params[3].enabled = True
             else:
                 self.params[3].enabled = False
 
-            # If 'Input Table' is populated with a FileGDB table, enable parameter: 'Add Field Aliaases to CSV Table (optional)'
-            if desc.datasetType == u'FeatureClass':
+            # If 'Input Table' is a feature class, enable all 'Add Geometry Attributes' parameters
+            if desc.datasetType == 'FeatureClass':
                 self.params[4].enabled = True
                 self.params[5].enabled = True
                 self.params[6].enabled = True

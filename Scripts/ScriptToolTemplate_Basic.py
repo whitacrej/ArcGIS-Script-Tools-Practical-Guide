@@ -19,10 +19,32 @@ Licence:    Licensed under the Apache License, Version 2.0 (the "License"); you 
 '''
 
 ''' Import Modules '''
+import arcpy
+
 
 ''' Functions '''
+def funtionName(var_1, var_2):
+    """
+    Function description...
+
+    Parameters:
+    var_1: data type
+        Description...
+    
+    var_2: data type
+        Description...
+    """
+    # Function Code
+
+    return
+
 
 ''' Parameters '''
+
+param_0 = arcpy.GetParameterAsText(0) # Param Name (Param Type; Param Notes)
+
+param_1 = arcpy.GetParameterAsText(1) # Param Name (Param Type; Param Notes)
+
 
 ''' Script '''
 
